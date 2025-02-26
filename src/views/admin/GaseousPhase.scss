@@ -1,0 +1,26 @@
+.ant-modal-footer {
+  font-size: 48px;
+  text-align: center !important;
+}
+.ant-modal-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  img{
+    width: 16vw;
+    height: 9vw;
+  }
+}
+:global{
+  .ant-modal css-dev-only-do-not-override-j9bb5n modalContent{
+    top: 10px!important;
+  }
+  
+  :where(.css-dev-only-do-not-override-j9bb5n).ant-modal{
+    top: 10px!important;
+  }
+}
+.ant-modal css-dev-only-do-not-override-j9bb5n modalContent{
+  top: 10px!important;
+}

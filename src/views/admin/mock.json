@@ -1,0 +1,57 @@
+{
+    "major": [
+      {
+        "course_name": "数据结构",
+        "lesson": "算法设计", 
+        "campus": "主校区",
+        "department": "计算机学院",
+        "major": "软件工程",
+        "degree": "本科",
+        "description": "核心专业课程",
+        "triples": [
+          ["算法设计", "前置课程", "数据结构"],
+          ["软件工程", "包含课程", "算法设计"],
+          ["计算机学院", "开设专业", "软件工程"]
+        ],
+        "entities": [
+          { "name": "算法设计", "type": "course", "学分": 3 },
+          { "name": "数据结构", "type": "course", "学分": 4 },
+          { "name": "软件工程", "type": "major" },
+          { "name": "计算机学院", "type": "department" }
+        ]
+      },
+      {
+        "course_name": "数据库原理",
+        "lesson": "SQL优化", 
+        "major": "计算机科学",
+        "triples": [
+          ["SQL优化", "属于", "计算机科学"],
+          ["数据库原理", "包含知识点", "SQL优化"]
+        ],
+        "entities": [
+          { "name": "SQL优化", "type": "course" },
+          { "name": "数据库原理", "type": "course" },
+          { "name": "计算机科学", "type": "major" }
+        ]
+      }
+    ],
+    "job": {
+      "title": "前端工程师",
+      "salary": "20-30k",
+      "sourceLink": "https://example.com",
+      "compName": "阿里云",
+      "compIndustry": "云计算",
+      "description": "资深前端开发岗位",
+      "triples": [
+        ["前端工程师", "要求技能", "React"],
+        ["阿里云", "招聘岗位", "前端工程师"],
+        ["云计算", "相关技术", "Docker"]
+      ],
+      "entities": [
+        { "name": "前端工程师", "type": "position", "经验要求": "3年以上" },
+        { "name": "React", "type": "skill", "权重": 0.8 },
+        { "name": "阿里云", "type": "company" },
+        { "name": "Docker", "type": "skill" }
+      ]
+    }
+  }

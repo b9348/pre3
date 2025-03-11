@@ -124,7 +124,7 @@ const GaseousPhase = () => {
   const option = {
     tooltip: {},
     legend: {
-      data: ['课程', '职位'],
+      data: ['课程'], // 删除: ['课程', '职位']
     },
     dataZoom: [
       {
@@ -168,53 +168,10 @@ const GaseousPhase = () => {
           },
         },
       },
-      {
-        name: '职位',
-        type: 'graph',
-        layout: 'force',
-        roam: true,
-        scaleLimit: {
-          min: 0.5,
-          max: 2,
-        },
-        force: {
-          repulsion: 1000,
-          edgeLength: 200,
-          layoutAnimation: true,
-        },
-        data: graphData.nodes,
-        links: graphData.links,
-        label: {
-          show: true,
-          position: 'right',
-        },
-        lineStyle: {
-          color: 'source',
-          curveness: 0.3,
-        },
-        emphasis: {
-          focus: 'adjacency',
-          label: {
-            show: true,
-            fontSize: 16,
-          },
-        },
-      },
     ],
   };
 
   const tabItems = [
-    {
-      key: 'all',
-      label: '全部',
-      children: (
-        <ReactECharts
-          option={option}
-          style={{ height: '600px', marginTop: 20 }}
-          onEvents={{ click: onChartClick }}
-        />
-      ),
-    },
     {
       key: 'course',
       label: '课程',
@@ -297,17 +254,6 @@ const GaseousPhase = () => {
         </>
       ),
     },
-    {
-      key: 'job',
-      label: '职位',
-      children: (
-        <ReactECharts
-          option={option}
-          style={{ height: '600px', marginTop: 20 }}
-          onEvents={{ click: onChartClick }}
-        />
-      ),
-    },
   ];
 
   // 原有效果钩子
@@ -350,3 +296,6 @@ const GaseousPhase = () => {
 };
 
 export default GaseousPhase;
+
+
+

@@ -61,20 +61,16 @@ const LiquidPhase = () => {
 
   // 原有数据处理函数
   const processGraphData = useCallback(
-    (type) => {
+    () => {
       const nodes = [];
       const links = [];
 
-      const allTriples = type === 'all'
-        ? [...mockData.data.major_triples, ...mockData.data.job_triples]
-        : type === 'course'
-          ? mockData.data.major_triples
-          : mockData.data.job_triples;
+      const allTriples = mockData.data.job_triples; // 删除: type === 'all' 和 type === 'course' 的逻辑
 
       // 处理节点
       const uniqueEntities = new Set();
       allTriples.forEach((triple) => {
-        uniqueEntities.add(triple.head.lesson || triple.head.title);
+        uniqueEntities.add(triple.head.title);
         uniqueEntities.add(triple.tail.name);
       });
 
@@ -91,7 +87,7 @@ const LiquidPhase = () => {
       // 处理关系
       allTriples.forEach((triple) => {
         links.push({
-          source: triple.head.lesson || triple.head.title,
+          source: triple.head.title,
           target: triple.tail.name,
           lineStyle: {
             color: '#999',
@@ -260,10 +256,10 @@ const LiquidPhase = () => {
   // 原有效果钩子
   useEffect(() => {
     if (chartReady) {
-      const data = processGraphData(currentKey);
+      const data = processGraphData(); // 删除: processGraphData(currentKey)
       setGraphData(data);
     }
-  }, [currentKey, processGraphData, chartReady]);
+  }, [chartReady, processGraphData]); // 删除: currentKey
 
   return (
     <Card>
@@ -297,6 +293,8 @@ const LiquidPhase = () => {
 };
 
 export default LiquidPhase;
+
+
 
 
 

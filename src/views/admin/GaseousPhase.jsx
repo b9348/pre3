@@ -2,14 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card, Descriptions, Tabs, Select } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import mockData from './mock.json';
- 
 
 const GaseousPhase = () => {
   // 原有状态
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const [selectedNode, setSelectedNode] = useState(null);
-  const [currentKey, setCurrentKey] = useState('all');
-  const [chartReady, setChartReady] = useState(false); // 新增状态，用于控制图表渲染时机
+  const [currentKey, setCurrentKey] = useState('course'); // 修改默认值为 'course'
+  const [chartReady, setChartReady] = useState(false);
 
   // 新增CSV相关状态
   const [csvData, setCsvData] = useState([]);
@@ -19,7 +18,7 @@ const GaseousPhase = () => {
 
   // 1. 加载CSV数据
   useEffect(() => {
-    fetch('src/assets/课程.csv') // 确保路径与项目结构匹配
+    fetch('src/assets/课程.csv')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -28,25 +27,19 @@ const GaseousPhase = () => {
       })
       .then((text) => {
         const lines = text.split('\n');
-        // const headers = lines[0].split(',');
         const data = lines.slice(1).map((line, index) => {
-          // 跳过空行
           if (!line.trim()) return null;
-
           const values = line.split(',');
-
-          // 确保每行有足够的列
           if (values.length < 3) {
             console.warn(`跳过第${index + 2}行，列数不足:`, values);
             return null;
           }
-
           return {
             category: values[0],
             discipline: values[1],
             major: values[2] ? values[2].trim() : '',
           };
-        }).filter(Boolean); // 过滤掉空值
+        }).filter(Boolean);
         setCsvData(data);
       })
       .catch((error) => {
@@ -61,20 +54,16 @@ const GaseousPhase = () => {
 
   // 原有数据处理函数
   const processGraphData = useCallback(
-    (type) => {
+    () => { // 删除 type 参数
       const nodes = [];
       const links = [];
 
-      const allTriples = type === 'all'
-        ? [...mockData.data.major_triples, ...mockData.data.job_triples]
-        : type === 'course'
-          ? mockData.data.major_triples
-          : mockData.data.job_triples;
+      const courseTriples = mockData.data.major_triples;
 
       // 处理节点
       const uniqueEntities = new Set();
-      allTriples.forEach((triple) => {
-        uniqueEntities.add(triple.head.lesson || triple.head.title);
+      courseTriples.forEach((triple) => {
+        uniqueEntities.add(triple.head.lesson);
         uniqueEntities.add(triple.tail.name);
       });
 
@@ -89,9 +78,9 @@ const GaseousPhase = () => {
       });
 
       // 处理关系
-      allTriples.forEach((triple) => {
+      courseTriples.forEach((triple) => {
         links.push({
-          source: triple.head.lesson || triple.head.title,
+          source: triple.head.lesson,
           target: triple.tail.name,
           lineStyle: {
             color: '#999',
@@ -124,7 +113,7 @@ const GaseousPhase = () => {
   const option = {
     tooltip: {},
     legend: {
-      data: ['课程'], // 删除: ['课程', '职位']
+      data: ['课程'],
     },
     dataZoom: [
       {
@@ -190,9 +179,9 @@ const GaseousPhase = () => {
               )}
               onChange={(value) => {
                 setSelectedCategory(value);
-                setSelectedDiscipline(''); // 清空第二级筛选
-                setSelectedMajor(''); // 清空第三级筛选
-                console.log('数据层更新：学科门类 ->', value); // 显式记录数据层更新
+                setSelectedDiscipline('');
+                setSelectedMajor('');
+                console.log('数据层更新：学科门类 ->', value);
               }}
             />
 
@@ -215,8 +204,8 @@ const GaseousPhase = () => {
               }
               onChange={(value) => {
                 setSelectedDiscipline(value);
-                setSelectedMajor(''); // 清空第三级筛选
-                console.log('数据层更新：学科 ->', value); // 显式记录数据层更新
+                setSelectedMajor('');
+                console.log('数据层更新：学科 ->', value);
               }}
             />
 
@@ -240,7 +229,7 @@ const GaseousPhase = () => {
               }
               onChange={(value) => {
                 setSelectedMajor(value);
-                console.log('数据层更新：专业 ->', value); // 显式记录数据层更新
+                console.log('数据层更新：专业 ->', value);
               }}
             />
           </Card>
@@ -259,19 +248,19 @@ const GaseousPhase = () => {
   // 原有效果钩子
   useEffect(() => {
     if (chartReady) {
-      const data = processGraphData(currentKey);
+      const data = processGraphData();
       setGraphData(data);
     }
-  }, [currentKey, processGraphData, chartReady]);
+  }, [processGraphData, chartReady]);
 
   return (
     <Card>
       {/* 原有分类展示区域 */}
-      {chartReady && ( // 确保图表容器已准备好
+      {chartReady && (
         <Tabs
           defaultActiveKey={currentKey}
           onChange={setCurrentKey}
-          items={tabItems.map((item) => ({ // 使用 items 属性替代 TabPane
+          items={tabItems.map((item) => ({
             key: item.key,
             label: item.label,
             children: item.children,
@@ -296,6 +285,3 @@ const GaseousPhase = () => {
 };
 
 export default GaseousPhase;
-
-
-
